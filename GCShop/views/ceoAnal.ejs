@@ -1,0 +1,46 @@
+<div class="container">	
+	<h2>지역별 고객 분포 </h2>
+	<!-- 서버로 부터 가져오는 코드 -->
+	<% var i = 0;
+	   while(i < percentage.length) { %>
+		<input type = "hidden" value = "<%=percentage[i].rate%>" class = "data" name = "rate">
+		<input type = "hidden" value = "<%=percentage[i].address%>" class = "address" name = "rate">
+	<% i += 1 } %> 
+	<canvas id="graph" width="500" height="500" style="background-color: aliceblue"></canvas>
+	<!-- 자바스크립트의 서버딴에서 노드 제이에스 js파일은 서버 프로그램, ejs안에 script코드는 브라우저에서 전송이되서 브라우저에서 해석하는 코드 -->
+	<script>
+		let data = document.getElementsByClassName("data");
+		let address = document.getElementsByClassName("address");
+		// 7개의 색밖에 지정하지 않음 만약 지역이 7개 이상이면 오류가 남.
+		let colors = ["blue", "magenta","green", "yellow",  "red", "black", "white"];
+		let canvas = document.getElementById("graph");
+		let context = canvas.getContext("2d");
+
+		for(let i = 0; i < data.length; i++){
+			context.font = "20px malgun gothic";
+			context.fillStyle = colors[i];
+			context.fillText(address[i].value + " | " + data[i].value + "%", 20, 20 + 20 * i);                    
+        }
+
+
+		let angle = 0;
+
+
+		for(let i = 0; i < data.length; i++){
+			context.fillStyle = colors[i];
+			context.beginPath();
+			//중심이 250, 250인 원
+			context.moveTo(250, 250);
+			// 210은 반지름 360에 비율만큼만 곱해줌(Math.PI * 2 * (parseFloat(data[i].value)/100)
+			context.arc(250, 250, 210, angle, angle + (Math.PI * 2 * (parseFloat(data[i].value)/100)));
+			//
+			context.lineTo(250, 250);
+			context.fill();
+			// angel에 더해줌
+			angle += Math.PI * 2 * (parseFloat(data[i].value)/100);
+			
+		}	
+	</script>
+
+</div>
+

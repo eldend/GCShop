@@ -1,0 +1,83 @@
+<div class="container">
+    <script>
+        function validateForm(event) {
+            var fields = [
+                { name: 'main_id', label: '대분류' },
+                { name: 'main_name', label: '대분류명' },
+                { name: 'sub_id', label: '소분류' },
+                { name: 'sub_name', label: '소분류명' },
+                { name: 'start', label: '시작일' },
+                { name: 'end', label: '종료일' },
+            ];
+    
+            for (var i = 0; i < fields.length; i++) {
+                var field = fields[i];
+                if (!$(`[name="${field.name}"]`).val()) {
+                    alert(`${field.label}을(를) 입력해주세요.`);
+                    event.preventDefault();
+                    return; 
+                }
+            }
+        }
+    
+        $("form").on("submit", function(event) {
+            validateForm(event);
+        });
+    </script>
+    <% if (req.url === '/create') { %>
+        <h2>코드 입력</h2>
+        <form action="/code/create_process" method="post" onsubmit="validateForm(event)">
+            <div class="mb-3">
+                <label class="form-label" for="main_id">대분류</label>
+                <input class="form-control" type="text" name="main_id" style="width:300px;" />
+            </div>
+            <div class="mb-3">
+                <label class="form-label" for="main_name">대분류명</label>
+                <input class="form-control" type="text" name="main_name" style="width:300px;" />
+            </div>
+            <div class="mb-3">
+                <label class="form-label" for="sub_id">소분류</label>
+                <input class="form-control" type="text" name="sub_id" style="width:300px;" />
+            </div>
+            <div class="mb-3">
+                <label class="form-label" for="sub_name">소분류명</label>
+                <input class="form-control" type="text" name="sub_name" style="width:300px;" />
+            </div>
+            <div class="mb-3">
+                <label class="form-label" for="start">시작일</label>
+                <input class="form-control" type="text" name="start" id="start" style="width:300px;" />
+            </div>
+            <div class="mb-3">
+                <label class="form-label" for="end">종료일</label>
+                <input class="form-control" type="text" name="end" id="end" style="width:300px;" />
+            </div>
+            <button class="btn btn-outline-primary btn-sm" type="submit">입력</button>
+			<button class="btn btn-outline-primary btn-sm" type="button" onclick="window.history.back();">코드 목록 돌아가기</button>
+        </form>
+    <% } else if (req.url.startsWith('/update/')) { %>
+        <h2>코드 수정</h2>
+        <form action="/code/update_process" method="post">
+            <input type="hidden" name="main_id" value="<%= codes[0].main_id  %>">
+            <input type="hidden" name="sub_id" value="<%= codes[0].sub_id  %>">
+            <input type="hidden" name="end" value="<%= codes[0].end  %>">
+            <div class="mb-3">
+                <label class="form-label" for="main_name">대분류명</label>
+                <input class="form-control" type="text" name="main_name" value="<%= codes[0].main_name %>" style="width:300px;" />
+            </div>
+            <div class="mb-3">
+                <label class="form-label" for="sub_name">소분류명</label>
+                <input class="form-control" type="text" name="sub_name" value="<%= codes[0].sub_name %>" style="width:300px;" />
+            </div>
+            <div class="mb-3">
+                <label class="form-label" for="start">시작일</label>
+                <input class="form-control" type="text" name="start" value="<%= codes[0].start %>" id="start" style="width:300px;" />
+            </div>
+            <div class="mb-3">
+                <label class="form-label" for="end">종료일</label>
+                <input class="form-control" type="text" name="end" value="<%= codes[0].end %>" id="end" style="width:300px;" disabled/>
+            </div>
+            <button class="btn btn-outline-primary btn-sm" type="submit">수정</button>
+			<button class="btn btn-outline-primary btn-sm" type="button" onclick="window.history.back();">코드 목록 돌아가기</button>
+        </form>
+    <% } %>
+</div>

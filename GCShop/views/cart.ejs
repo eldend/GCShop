@@ -1,0 +1,95 @@
+<form method="post" id="cartForm" onsubmit="return checkMerId();">
+    <table class="table table-bordered" style="width: 100%; text-align: center;">
+        <thead class="table-primary" style="text-align: center;">
+            <th>구매선택</th>
+            <th>상품</th>
+            <th>상품명</th>
+            <th>단가</th>
+            <th>담은날</th>
+            <th>수량</th>
+        </thead>
+        <% var i = 0; 
+        while(i < carts.length) { %>
+        <tr>
+            <td style="vertical-align: middle;">
+                <input type="checkbox" name="cart_id" value="<%- carts[i].cart_id %>" onclick="checkOnlyOne(this);">
+            </td>
+            <td style="vertical-align: middle;">
+                <img src="<%- carts[i].image %>" style="width:100px;height:100px;">
+            </td>
+            <td style="vertical-align: middle;">
+                <%- carts[i].name %>
+            </td>
+            <td style="vertical-align: middle;">
+                <%- carts[i].price.toLocaleString('ko-KR') %>원
+            </td>
+            <td style="vertical-align: middle;">
+                <%- carts[i].date %>
+            </td>
+            <td style="vertical-align: middle;">
+                수량 : <input type="number" name="qty_<%= carts[i].cart_id %>" value="1">
+            </td>
+        </tr>
+        <% i++; } %>
+    </table>
+
+    <input type="hidden" name="loginid" value="<%- loginid %>">
+    <input type="hidden" id="mer_id" name="mer_id" value="<%= carts.length > 0 ? carts[0].mer_id : '' %>">
+    <input type="hidden" name="price" value="<%= carts.length > 0 ? carts[0].price : '' %>">
+    <input type="hidden" name="image" value="<%= carts.length > 0 ? carts[0].image : '' %>">
+    <input type="hidden" name="name" value="<%= carts.length > 0 ? carts[0].name : '' %>">
+
+    <div class="button-group">
+        <button class="btn btn-outline-primary btn-sm" formaction="/purchase/cart_purchase" type="submit" onclick="return checkSelection('purchase');">결제</button>
+        <button class="btn btn-outline-primary btn-sm" formaction="/purchase/cart_cancel" type="submit" onclick="return confirmDeletion();">삭제</button>
+        <a href="/"><button class="btn btn-outline-primary btn-sm" type="button">상품목록 돌아가기</button></a>
+    </div>
+</form>
+
+<script>
+    function checkOnlyOne(checkbox) {
+        const checkboxes = document.querySelectorAll('input[name="cart_id"]');
+        checkboxes.forEach((cb) => {
+            if (cb !== checkbox) cb.checked = false;
+        });
+    }
+
+    function checkSelection(action) {
+        const checkboxes = document.querySelectorAll('input[name="cart_id"]:checked');
+        if (checkboxes.length === 0) {
+            const message = action === 'purchase' 
+                ? '구매할 상품을 선택해 주세요.' 
+                : '삭제할 상품을 선택해 주세요.';
+            alert(message);
+            return false;
+        }
+        return true;
+    }
+
+    function confirmDeletion() {
+        const checkboxes = document.querySelectorAll('input[name="cart_id"]:checked');
+        if (checkboxes.length === 0) {
+            alert('삭제할 상품을 선택해 주세요.');
+            return false;
+        }
+        return confirm('정말로 삭제하시겠습니까?');
+    }
+
+    function checkMerId() {
+        const merId = document.getElementById('mer_id').value;
+        if (!merId) {
+            alert('장바구니에 상품을 담아주세요.');
+            return false;
+        }
+        return true;
+    }
+</script>
+
+<style>
+    .button-group {
+        display: flex;
+        justify-content: flex-end;
+        gap: 10px;
+        margin-top: 20px;
+    }
+</style>

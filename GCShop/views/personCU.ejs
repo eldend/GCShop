@@ -1,0 +1,152 @@
+<div class="container">
+    <script>
+        function validateForm(event) {
+            var fields = [
+                { name: 'loginid', label: 'ID' },
+                { name: 'password', label: 'PW' },
+                { name: 'name', label: '이름' },
+                { name: 'address', label: '주소' },
+                { name: 'tel', label: '전화번호' },
+                { name: 'birth', label: '생일' },
+            ];
+    
+            for (var i = 0; i < fields.length; i++) {
+                var field = fields[i];
+                if (!$(`[name="${field.name}"]`).val()) {
+                    alert(`${field.label}을(를) 입력해주세요.`);
+                    event.preventDefault();
+                    return; 
+                }
+            }
+        }
+    
+        $("form").on("submit", function(event) {
+            validateForm(event);
+        });
+    </script>
+    <% if (req.url === '/register') { %>
+        <h2>회원가입</h2>
+        <form action="/auth/register_process" method="post" onsubmit="validateForm(event)">
+            <input type = "hidden" name="class" value = "CST">
+            <input type = "hidden" name="grade" value = "S">
+            <div class="mb-3">
+                <label class="form-label" for="loginid">ID</label>
+                <input class="form-control" type="text" name="loginid" id="loginid" placeholder="아이디를 입력해 주세요" style="width:300px;" />
+            </div>
+            <div class="mb-3">
+                <label class="form-label" for="password">PW</label>
+                <input class="form-control" type="password" name="password" id="password" placeholder="패스워드를 입력해 주세요" style="width:300px;" />
+            </div>
+            <div class="mb-3">
+                <label class="form-label" for="name">이름</label>
+                <input class="form-control" type="text" name="name" id="name" placeholder="이름을 입력해 주세요" style="width:300px;" />
+            </div>
+            <div class="mb-3">
+                <label class="form-label" for="address">주소</label>
+                <input class="form-control" type="text" name="address" id="address" placeholder="주소를 입력해 주세요" style="width:300px;" />
+            </div>
+            <div class="mb-3">
+                <label class="form-label" for="tel">전화번호</label>
+                <input class="form-control" type="text" name="tel" id="tel" placeholder="000-0000-0000" style="width:300px;" />
+            </div>
+            <div class="mb-3">
+                <label class="form-label" for="birth">생일</label>
+                <input class="form-control" type="text" name="birth" id="birth" placeholder="YYYYMMDD" style="width:300px;" />
+            </div>		
+            <button class="btn btn-outline-primary btn-sm" type="submit">회원가입</button>
+            <button class="btn btn-outline-primary btn-sm" type="button" onclick="window.history.back();">돌아가기</button>
+        </form>
+	<% }else if (req.url === '/create' && cls === 'MNG') { %>
+    <h2>관리자 기능 : 회원생성</h2>
+    <form action="/person/create_process" method="post">
+        <div class="mb-3">
+            <label class="form-label" for="loginid">ID</label>
+            <input class="form-control" type="text" name="loginid" id="loginid" placeholder="아이디를 입력해 주세요" style="width:300px;" />
+        </div>
+        <div class="mb-3">
+            <label class="form-label" for="password">PW</label>
+            <input class="form-control" type="password" name="password" id="password" placeholder="패스워드를 입력해 주세요" style="width:300px;" />
+        </div>
+        <div class="mb-3">
+            <label class="form-label" for="name">이름</label>
+            <input class="form-control" type="text" name="name" id="name" placeholder="이름을 입력해 주세요" style="width:300px;" />
+        </div>
+        <div class="mb-3">
+            <label class="form-label" for="address">주소</label>
+            <input class="form-control" type="text" name="address" id="address" placeholder="주소를 입력해 주세요" style="width:300px;" />
+        </div>
+        <div class="mb-3">
+            <label class="form-label" for="tel">전화번호</label>
+            <input class="form-control" type="text" name="tel" id="tel" placeholder="000-0000-0000" style="width:300px;" />
+        </div>
+        <div class="mb-3">
+            <label class="form-label" for="birth">생일</label>
+            <input class="form-control" type="text" name="birth" id="birth" placeholder="YYYYMMDD" style="width:300px;" />
+        </div>
+		<div class="mb-3">
+			<label class="form-label" for="class">class</label>
+			<select name="class" id="class">
+				<option value="MNG">관리자</option>
+				<option value="CEO">경영자</option>
+				<option value="CST">고객</option>
+			</select>
+		</div>
+		<div class="mb-3">
+			<label class="form-label" for="grade">grade</label>
+			<select name="grade" id="grade">
+				<option value="S">실버(가장 낮은 등급)</option>
+				<option value="G">골드(중간 등급)</option>
+				<option value="D">다이아몬드(가장 높은 등급)</option>
+			</select>
+		</div>		
+        <button class="btn btn-outline-primary btn-sm" type="submit">입력</button>
+		<button class="btn btn-outline-primary btn-sm" type="button" onclick="window.history.back();">돌아가기</button>
+    </form>
+	<% } else if (req.url.startsWith('/update/')  && cls === 'MNG') { %>
+	<h2>관리자 기능 : 회원수정</h2>
+    <form action="/person/update_process" method="post">
+		<input type="hidden" name="loginid" value="<%= persons[0].loginid  %>">
+        <div class="mb-3">
+            <label class="form-label" for="password">PW</label>
+            <input class="form-control" type="password" name="password" id="password" value="<%= persons[0].password %>" placeholder="패스워드를 입력해 주세요" style="width:300px;" />
+        </div>
+        <div class="mb-3">
+            <label class="form-label" for="name">이름</label>
+            <input class="form-control" type="text" name="name" id="name" value="<%= persons[0].name %>" placeholder="이름을 입력해 주세요" style="width:300px;" />
+        </div>
+        <div class="mb-3">
+            <label class="form-label" for="address">주소</label>
+            <input class="form-control" type="text" name="address" id="address" value="<%= persons[0].address %>" placeholder="주소를 입력해 주세요" style="width:300px;" />
+        </div>
+        <div class="mb-3">
+            <label class="form-label" for="tel">전화번호</label>
+            <input class="form-control" type="text" name="tel" id="tel" value="<%= persons[0].tel %>" placeholder="000-0000-0000" style="width:300px;" />
+        </div>
+        <div class="mb-3">
+            <label class="form-label" for="birth">생일</label>
+            <input class="form-control" type="text" name="birth" id="birth" value="<%= persons[0].birth %>" placeholder="YYYYMMDD" style="width:300px;" />
+        </div>
+		<% for (let i = 0; i < persons.length; i++) { %>
+			<div class="mb-3">
+			  <label class="form-label" for="class">class</label>
+			  <select name="class" id="class">
+				<option value="MNG" <%- persons[i].class === 'MNG' ? 'selected' : '' %>>관리자</option>
+				<option value="CEO" <%- persons[i].class === 'CEO' ? 'selected' : '' %>>경영자</option>
+				<option value="CST" <%- persons[i].class === 'CST' ? 'selected' : '' %>>고객</option>
+			  </select>
+			</div>
+		  
+			<div class="mb-3">
+			  <label class="form-label" for="grade">grade</label>
+			  <select name="grade" id="grade">
+				<option value="S" <%- persons[i].grade === 'S' ? 'selected' : '' %>>실버(가장 낮은 등급)</option>
+				<option value="G" <%- persons[i].grade === 'G' ? 'selected' : '' %>>골드(중간 등급)</option>
+				<option value="D" <%- persons[i].grade === 'D' ? 'selected' : '' %>>다이아몬드(가장 높은 등급)</option>
+			  </select>
+			</div>
+		  <% } %>							
+        <button class="btn btn-outline-primary btn-sm" type="submit">입력</button>
+		<button class="btn btn-outline-primary btn-sm" type="button" onclick="window.history.back();">돌아가기</button>
+    </form>
+	<% } %>
+</div>

@@ -1,0 +1,42 @@
+<table class="table table-bordered" style="width: 100%; text-align: center;">
+        <thead class="table-primary" style="text-align: center;">
+            <th>loginid</th>
+            <th>고객명</th>
+            <th>상품id</th>
+            <th>상품명</th>
+            <th>일자</th>
+            <th colspan="2"></th>  
+        </thead>
+        <% var i = 0; while(i < carts.length) { %>
+        <tr>
+            <td style="vertical-align: middle;">
+                <%- carts[i].loginid %>
+            </td>
+            <td style="vertical-align: middle;">
+                <%- carts[i].person_name %>
+            </td>
+            <td style="vertical-align: middle;">
+                <%- carts[i].mer_id %>
+            </td>
+            <td style="vertical-align: middle;">
+                <%- carts[i].product_name %>
+            </td>
+            <td style="vertical-align: middle;">
+                <%- carts[i].date %>
+            </td>
+            <td><a href="/cartview_update/<%- carts[i].cart_id %>">수정</a></td>
+            <td><a href="/cartview_delete/<%- carts[i].cart_id %>" onclick="if(confirm('정말로 삭제하시겠습니까?')==false) return false">삭제</a></td>
+        </tr>
+        <% i++; } %>
+    </table>
+    <% if (carts.length === 0) { %>
+        <p>자료가 없습니다. </p>
+     <% } %>
+<style>
+    .button-group {
+        display: flex;
+        justify-content: flex-end;
+        gap: 10px;
+        margin-top: 20px;
+    }
+</style>

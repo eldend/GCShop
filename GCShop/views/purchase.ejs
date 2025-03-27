@@ -1,0 +1,46 @@
+<table class="table table-bordered" style="width: 100%; text-align: center;">
+    <thead class="table-primary" style="text-align: center;">
+        <th>상품</th>
+        <th>상품명</th>
+        <th>단가</th>
+        <th>구매량</th>
+        <th>총금액</th>
+        <th>구매일</th>
+        <th>취소 여부</th> 
+    </thead> 
+    <% var i = 0;
+    while(i < purchases.length){ %>
+    <tr>
+        <td style="vertical-align: middle;"><img src="<%- purchases[i].image %>" style="width:100px;height:100px;"></td>
+        <td style="vertical-align: middle;"><%- purchases[i].name %></td>
+        <td style="vertical-align: middle;"><%- purchases[i].price.toLocaleString('ko-KR') %>원</td>
+        <td style="vertical-align: middle;"><%- purchases[i].qty %></td>
+        <td style="vertical-align: middle;"><%- purchases[i].total.toLocaleString('ko-KR') %>원</td>
+        <td style="vertical-align: middle;"><%- purchases[i].date %></td>
+        <% if(purchases[i].cancel == 'N') { %>
+            <td style="vertical-align: middle;">
+                <form action="/purchase/cancel/<%- purchases[i].purchase_id %>" method="POST">
+                    <button type="submit" class="link-button">구매취소</button>
+                </form>
+            </td>
+        <% } else { %>
+            <td style="vertical-align: middle;">취소된 상품</td>
+        <% } %>
+    </tr>
+    <% i++; } %>
+</table>
+
+<style>
+    .link-button {
+        background: none;
+        border: none;
+        color: #007bff;
+        cursor: pointer;
+        font-size: 16px;
+    }
+
+    .link-button:hover {
+        text-decoration: none;
+        color: #0056b3;
+    }
+</style>

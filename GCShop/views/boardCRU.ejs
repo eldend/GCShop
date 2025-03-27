@@ -1,0 +1,139 @@
+<div class="container">
+    <script>
+        function cstvalidateForm(event) {
+            var fields = [
+                { name: 'title', label: '제목' },
+                { name: 'name', label: '작성자' },
+                { name: 'content', label: '내용' },
+                { name: 'password', label: '갱신삭제시 비밀번호' }
+            ];
+    
+            for (var i = 0; i < fields.length; i++) {
+                var field = fields[i];
+                if (!$(`[name="${field.name}"]`).val()) {
+                    alert(`${field.label}을(를) 입력해주세요.`);
+                    event.preventDefault();
+                    return; 
+                }
+            }
+        }
+    
+        $("form").on("submit", function(event) {
+            cstvalidateForm(event);
+        });
+        function mngvalidateForm(event) {
+            var fields = [
+                { name: 'title', label: '제목' },
+                { name: 'name', label: '작성자' },
+                { name: 'content', label: '내용' },
+            ];
+    
+            for (var i = 0; i < fields.length; i++) {
+                var field = fields[i];
+                if (!$(`[name="${field.name}"]`).val()) {
+                    alert(`${field.label}을(를) 입력해주세요.`);
+                    event.preventDefault();
+                    return; 
+                }
+            }
+        }
+    
+        $("form").on("submit", function(event) {
+            mngvalidateForm(event);
+        });
+    </script>
+<% if (req.url.startsWith('/create/')) { %>
+    <% if(cls == "MNG") {%>
+    <h2><%-boardtypes2[0].title%> 생성</h2>
+	<form action="/board/create_process" method="post" onsubmit="mngvalidateForm(event)">
+        <input type = "hidden" name="type_id" value = "<%= typeId %>">
+        <input type = "hidden" name="loginid" value = "<%-loginid%>">
+        <input type = "hidden" name="pNum" value = "<%-pNum%>">
+		<div class="mb-3">
+			<label class="form-label" for="id">제목</label> 
+			<input class="form-control" type="text" name="title" style = "width:300px;"/>
+		</div>
+        <div class="mb-3">
+			<label class="form-label" for="id">작성자</label> 
+			<input class="form-control" type="text" name="name" value = "<%-who%>" style = "width:300px;" disabled/>
+		</div>
+        <div class="mb-3">
+			<label class="form-label" for="id">내용</label> 
+			<textarea class="form-control" name="content" style = "width:800px;height: 200px;"></textarea>
+		</div>
+        <button class="btn btn-outline-primary btn-sm" type="submit">생성</button>
+    </form>
+    <% }else if(cls === "CST") {%>
+        <h2><%-boardtypes2[0].title%> 생성</h2>
+        <form action="/board/create_process" method="post" onsubmit="cstvalidateForm(event)">
+            <input type = "hidden" name="type_id" value = "<%= typeId %>">
+            <input type = "hidden" name="loginid" value = "<%= loginid %>">
+            <div class="mb-3">
+                <label class="form-label" for="id">제목</label> 
+                <input class="form-control" type="text" name="title" style = "width:300px;" />
+            </div>
+            <div class="mb-3">
+                <label class="form-label" for="id">작성자</label> 
+                <input class="form-control" type="text" name="name" value = "<%-who%>" style = "width:300px;" disabled/>
+            </div>
+            <div class="mb-3">
+                <label class="form-label" for="id">내용</label> 
+                <textarea class="form-control" name="content" style = "width:800px;height: 200px;" ></textarea>
+            </div>
+            <div class="mb-3">
+                <label class="form-label" for="id">갱신삭제시 비밀번호</label> 
+                <input class="form-control" type="text" name="password" value = "" style = "width:300px;"/>
+            </div>
+            <button class="btn btn-outline-primary btn-sm" type="submit">생성</button>
+        </form>
+    <% } %>
+<% } else if (req.url.startsWith('/update')) { %>
+    <% if(cls == "MNG") {%>
+        <h2><%-boardtypes2[0].title%> 수정</h2>
+        <form action="/board/update_process" method="post" onsubmit="mngvalidateForm(event)">
+            <input type = "hidden" name="board_id" value = "<%- boards[0].board_id %>">
+            <input type = "hidden" name="type_id" value = "<%- boards[0].type_id %>">
+            <input type = "hidden" name="loginid" value = "<%- boards[0].loginid %>">
+            <input type = "hidden" name="pNum" value = "<%- pNum %>">
+            <div class="mb-3">
+                <label class="form-label" for="id">제목</label> 
+                <input class="form-control" type="text" name="title"  value = "<%-boards[0].title%>" style = "width:300px;" />
+            </div>
+            <div class="mb-3">
+                <label class="form-label" for="id">작성자</label> 
+                <input class="form-control" type="text" name="name" value = "<%-boards[0].name%>" style = "width:300px;" disabled/>
+            </div>
+            <div class="mb-3">
+                <label class="form-label" for="id">내용</label> 
+                <textarea class="form-control" name="content" style = "width:800px;height: 200px;" ><%-boards[0].content%></textarea>
+            </div>
+            <button class="btn btn-outline-primary btn-sm" type="submit">수정</button>
+        </form>
+    <% }else if(cls === "CST") {%>
+        <h2><%-boardtypes2[0].title%> 수정</h2>
+        <form action="/board/update_process" method="post" onsubmit="cstvalidateForm(event)">
+            <input type = "hidden" name="board_id" value = "<%- boards[0].board_id %>">
+            <input type = "hidden" name="type_id" value = "<%- boards[0].type_id %>">
+            <input type = "hidden" name="loginid" value = "<%- boards[0].loginid %>">
+            <input type = "hidden" name="pNum" value = "<%- pNum %>">
+            <div class="mb-3">
+                <label class="form-label" for="id">제목</label> 
+                <input class="form-control" type="text" name="title"  value = "<%-boards[0].title%>" style = "width:300px;" />
+            </div>
+            <div class="mb-3">
+                <label class="form-label" for="id">작성자</label> 
+                <input class="form-control" type="text" name="name" value = "<%-who%>" style = "width:300px;" disabled/>
+            </div>
+            <div class="mb-3">
+                <label class="form-label" for="id">내용</label> 
+                <textarea class="form-control" name="content" style = "width:800px;height: 200px;" ><%-boards[0].content%></textarea>
+            </div>
+            <div class="mb-3">
+                <label class="form-label" for="id">갱신삭제시 비밀번호</label> 
+                <input class="form-control" type="text" name="password" style = "width:300px;" />
+            </div>
+            <button class="btn btn-outline-primary btn-sm" type="submit">수정</button>
+        </form>
+    <% } %>
+<% } %>
+</div>

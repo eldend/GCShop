@@ -1,0 +1,34 @@
+<h1><%= boardtypes2[0].title %></h1>
+<table class="table table-bordered border-primary">
+    <thead>
+        <tr>
+            <th>작성자</th>
+            <th>제목</th>
+            <th>날짜</th>
+        </tr>
+    </thead>
+    <tbody>
+        <% var i = 0; 
+        while (i < boards.length) { %>
+        <tr>
+            <td><%- boards[i].name -%></td>
+            <td><a href="/board/detail/<%= boards[i].board_id %>/<%= pNum %>"><%- boards[i].title %></a></td>
+            <td><%- boards[i].date %></td>
+        </tr>
+        <% i++; } %>
+    </tbody>
+</table>
+<% if(cls === 'MNG' || (cls == 'CST' && boardtypes2[0].write_YN === 'Y')) {%>
+<div class="d-grid gap-2 d-md-flex justify-content-md-end">
+   <a href="/board/create/<%-boardtypes2[0].type_id%>"><button type="button" class="btn btn-info me-md-2">글쓰기</button></a>
+</div>
+<% } %>
+<% var j = 1; 
+    while (j <= totalPages) { 
+        if (j == pNum) { %>  
+            <span style="font-weight: bold;"><%= j %></span>&nbsp;&nbsp;  
+        <% } else { %>  
+            <span><a href="/board/view/<%= boardtypes2[0].type_id %>/<%= j %>"><%= j %></a></span>&nbsp;&nbsp;  
+        <% } 
+    j++; 
+} %>

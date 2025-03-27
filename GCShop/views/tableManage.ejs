@@ -1,0 +1,27 @@
+<table class="table table-bordered" style="width: 100%; text-align: center;">
+    <thead class="table-primary" style="text-align: center;">
+        <th>테이블 명</th>
+        <th>테이블 설명</th>
+    </thead>
+    <% var i = 0; while(i < tables.length) { %>
+    <tr>
+        <td style="vertical-align: middle;">
+            <a href="/table/view/<%- tables[i].TABLE_NAME %>"><%- tables[i].TABLE_NAME %></a>
+        </td>
+        <td style="vertical-align: middle;">
+            <%- tables[i].TABLE_COMMENT %>
+        </td>
+    </tr>
+    <% i++; } %>
+</table>
+<% if (tables.length === 0) { %>
+    <p>자료가 없습니다. </p>
+ <% } %>
+<style>
+.button-group {
+    display: flex;
+    justify-content: flex-end;
+    gap: 10px;
+    margin-top: 20px;
+}
+</style>

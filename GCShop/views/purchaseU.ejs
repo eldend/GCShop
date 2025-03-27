@@ -1,0 +1,94 @@
+<script>
+    function validateForm(event) {
+        var fields = [
+            { name: 'loginid', label: '고객' },
+            { name: 'mer_id', label: '상품' },
+            { name: 'date', label: '날짜' },
+            { name: 'price', label: '가격' },
+            { name: 'point', label: '포인트' },
+            { name: 'qty', label: '수량' },
+            { name: 'total', label: '총액' },
+            { name: 'payYN', label: '지불여부' },
+            { name: 'cancel', label: '취소여부' },
+            { name: 'refund', label: '환불여부' }
+        ];
+
+        for (var i = 0; i < fields.length; i++) {
+            var field = fields[i];
+            if (!$(`[name="${field.name}"]`).val()) {
+                alert(`${field.label}을(를) 입력해주세요.`);
+                event.preventDefault();
+                return; 
+            }
+        }
+    }
+
+    $("form").on("submit", function(event) {
+        validateForm(event);
+    });
+</script>
+<h2>구매내역 수정</h2>
+<form action="/purchaseupdate_process" method="post" onsubmit="validateForm(event)">
+    <div class="mb-3">
+        <label class="form-label" for="class">고객</label>
+        <select name="loginid" id="class">
+            <% for (let i = 0; i < persons.length; i++) { %>
+                <option value="<%= persons[i].loginid %>" 
+                    <%= persons[i].loginid === purchases[0].loginid ? 'selected' : '' %>>
+                    <%= persons[i].name %>
+                </option>
+            <% } %>	
+        </select>
+    </div>
+
+    <div class="mb-3">
+        <label class="form-label" for="grade">상품</label>
+        <select name="mer_id" id="grade">
+            <% for (let i = 0; i < products.length; i++) { %>
+                <option value="<%= products[i].mer_id %>" 
+                    <%= products[i].mer_id === purchases[0].mer_id ? 'selected' : '' %>>
+                    <%= products[i].name %>
+                </option>
+            <% } %>	
+        </select>
+    <div class="mb-3">
+        <label class="form-label" for="date">날짜</label>
+        <input class="form-control" type="text" name="date" value="<%= purchases[0].date %>" style="width:300px;" disabled/>
+        <label class="form-label" for="price">가격</label>
+        <input class="form-control" type="text" name="price" value="<%= purchases[0].price %>" style="width:300px;"/>
+    </div>
+    <div class="mb-3">
+        <label class="form-label" for="point">포인트</label>
+        <input class="form-control" type="text" name="point" value="<%= purchases[0].point %>" style="width:300px;"/>
+        <label class="form-label" for="qty">수량</label>
+        <input class="form-control" type="text" name="qty" value="<%= purchases[0].qty %>" style="width:300px;"/>
+    </div>
+    <div class="mb-3">
+        <label class="form-label" for="total">총액</label>
+        <input class="form-control" type="text" name="total" value="<%= purchases[0].total %>" style="width:300px;"/>
+    </div>
+    <div class="mb-3">
+        <label class="form-label" for="payYN">지불여부</label>
+        <select name="payYN" id="payYN">
+            <option value="Y" <%= purchases[0].payYN === 'Y' ? 'selected' : '' %>>YES</option>
+            <option value="N" <%= purchases[0].payYN === 'N' ? 'selected' : '' %>>NO</option>
+        </select>
+    </div>
+    <div class="mb-3">
+        <label class="form-label" for="cancel">취소여부</label>
+        <select name="cancel" id="cancel">
+            <option value="Y" <%= purchases[0].cancel === 'Y' ? 'selected' : '' %>>YES</option>
+            <option value="N" <%= purchases[0].cancel === 'N' ? 'selected' : '' %>>NO</option>
+        </select>
+    </div>
+    <div class="mb-3">
+        <label class="form-label" for="refund">환불여부</label>
+        <select name="refund" id="refund">
+            <option value="Y" <%= purchases[0].refund === 'Y' ? 'selected' : '' %>>YES</option>
+            <option value="N" <%= purchases[0].refund === 'N' ? 'selected' : '' %>>NO</option>
+        </select>
+    </div>
+    <input type="hidden" name="purchase_id" value="<%= purchases[0].purchase_id %>">
+    <button class="btn btn-outline-primary btn-sm" type="submit">수정</button>
+    <button class="btn btn-outline-primary btn-sm" type="button" onclick="window.history.back();">구매 목록 돌아가기</button>
+</form>
